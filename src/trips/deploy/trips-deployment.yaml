@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trips
+  namespace: tripinsights-api
+  labels:
+    app: trips
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trips
+  template:
+    metadata:
+      labels:
+        app: trips
+    spec:
+      containers:
+      - name: trips
+        image: registrypvp6623.azurecr.io/tripinsights/trips:1.0
+        ports:
+          - containerPort: 8080
+            name: http
+          - containerPort: 443
+            name: https
+        envFrom:
+          - secretRef:
+              name: tripinsights-db-secret
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Production
+          - name: PORT
+            value: "8080"
+          - name: OPENAPI_DOCS_URI
+            value: localhost

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userprofile
+  namespace: tripinsights-api
+  labels:
+    app: userprofile
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: userprofile
+  template:
+    metadata:
+      labels:
+        app: userprofile
+    spec:
+      containers:
+      - name: userprofile
+        image: registrypvp6623.azurecr.io/tripinsights/userprofile:1.0
+        ports:
+          - containerPort: 8080
+            name: http
+          - containerPort: 443
+            name: https
+        envFrom:
+          - secretRef:
+              name: tripinsights-db-secret
+        env:
+          - name: PORT
+            value: "8080"
+          - name: CONFIG_FILES_PATH
+            value: /secrets
