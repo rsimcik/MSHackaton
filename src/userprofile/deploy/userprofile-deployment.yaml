@@ -21,13 +21,19 @@ spec:
         ports:
           - containerPort: 8080
             name: http
-          - containerPort: 443
-            name: https
-        envFrom:
-          - secretRef:
-              name: tripinsights-db-secret
         env:
           - name: PORT
             value: "8080"
           - name: CONFIG_FILES_PATH
             value: /secrets
+        volumeMounts:
+        - name: secrets-store-inline
+          mountPath: "/secrets"
+          readOnly: true
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "trip-insigsts-key-vault"
