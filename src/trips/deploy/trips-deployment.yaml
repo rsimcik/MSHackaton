@@ -33,3 +33,14 @@ spec:
             value: "8080"
           - name: OPENAPI_DOCS_URI
             value: localhost
+        volumeMounts:
+        - name: secrets-store-inline
+          mountPath: "/secrets"
+          readOnly: true
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "trip-insigsts-key-vault"
