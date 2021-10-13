@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: trips-ingress
+  namespace: tripinsights-api
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /api/trips
+        pathType: Prefix
+        backend:
+          service:
+            name: trips
+            port:
+              number: 8080
+      - path: /api/docs/trips
+        pathType: Prefix
+        backend:
+          service:
+            name: trips
+            port:
+              number: 8080
+      - path: /api/json 
+        pathType: Prefix
+        backend:
+          service:
+            name: trips
+            port:
+              number: 8080
