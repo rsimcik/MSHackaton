@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-java
+  namespace: tripinsights-api
+  labels:
+    app: user-java
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-java
+  template:
+    metadata:
+      labels:
+        app: user-java
+    spec:
+      containers:
+      - name: user-java
+        image: registrypvp6623.azurecr.io/tripinsights/user-java:1.0
+        ports:
+          - containerPort: 8080
+            name: http
+        env:
+          - name: PORT
+            value: "8080"
+        volumeMounts:
+          - name: secrets-store-inline
+            mountPath: "/secrets"
+            readOnly: true    
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "trip-insigsts-key-vault"        
