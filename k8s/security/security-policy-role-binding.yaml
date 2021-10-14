@@ -1,0 +1,18 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: trip-deny-privileged-clusterrolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: trip-deny-privileged-clusterrole
+#subjects:
+#- apiGroup: rbac.authorization.k8s.io
+#  kind: Group
+#  name: system:serviceaccounts
+subjects:
+- kind: Group
+  namespace: tripinsights-api
+  name: bd6c47e0-11d7-4992-ba0e-5569f206a079 
+  
+  
