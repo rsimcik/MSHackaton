@@ -1,0 +1,50 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: trips-backend-policy
+  namespace: tripinsights-api
+spec:
+  podSelector:
+    matchLabels:
+      app: trips
+  policyTypes:
+  #- Egress
+  - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              purpose: web
+        - podSelector:
+            matchLabels:
+              app: tripviewer
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              purpose: ingress
+  egress:
+    - to:
+      - ipBlock:
+          cidr:  52.155.226.189/32
+      ports:
+        - protocol: TCP
+          port: 443
+    - to:
+      - ipBlock:
+          cidr:  52.138.224.1/32
+      ports:
+        - protocol: TCP
+          port: 1433
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 53
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 443
+        - protocol: TCP
+          port: 8080
+        - protocol: TCP
+          port: 80

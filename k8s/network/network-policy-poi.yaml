@@ -1,0 +1,14 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: poi-backend-policy
+  namespace: tripinsights-api
+spec:
+  podSelector:
+    matchLabels:
+      app: poi
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: tripviewer
